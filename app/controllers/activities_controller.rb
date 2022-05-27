@@ -36,11 +36,12 @@ class ActivitiesController < ApplicationController
 
   # POST /activities
   def create
-    # TODO: create assignment for logged user
 
     @activity = Activity.new(activity_params)
-
+    
+    
     if @activity.save
+      create_assignment_for_owner
       render json: @activity, status: :created, location: @activity
     else
       render json: @activity.errors, status: :unprocessable_entity
@@ -70,5 +71,15 @@ class ActivitiesController < ApplicationController
     # Only allow a list of trusted parameters through.
     def activity_params
       params.require(:activity).permit(:name, :description, :activity_type, :location, :budget, :start_date, :end_date, :access_level, :status)
+    end
+
+    # @return [Assignment]
+    # @description Get the owner of the activity and create an assignment for it
+    #     *set_workflow*
+    # @example
+    #     assignment = create_assignment_for_owner
+    def create_assignment_for_owner
+      @assignment = Assignment.new(user_id: @current_user.id, activity_id: @activity.id, role_assignment: 'owner', amount_to_pay: @activity.budget)
+      @assignment.save
     end
 end

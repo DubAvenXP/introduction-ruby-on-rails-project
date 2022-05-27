@@ -17,6 +17,11 @@ class AssignmentsController < ApplicationController
   def create
     @assignment = Assignment.new(assignment_params)
 
+    if verify_previous_assignment
+      render json: { error: 'User already assigned to activity' }, status: :unprocessable_entity
+      return
+    end
+
     if @assignment.save
       render json: @assignment, status: :created, location: @assignment
     else
@@ -47,5 +52,15 @@ class AssignmentsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def assignment_params
       params.require(:assignment).permit(:role_assignment, :amount_to_pay, :user_id, :activity_id)
+    end
+
+    # @return [boolean]
+    # @description This method is used to verify if the user is previously assigned to the activity
+    # and return true if the user is already assigned to the activity
+    # @example
+    # verify_previous_assignment
+    def verify_previous_assignment
+      assignment = Assignment.where(user_id: @assignment.user_id, activity_id: @assignment.activity_id).first
+      assignment.present?
     end
 end
