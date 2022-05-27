@@ -1,6 +1,7 @@
 class Assignment < ApplicationRecord
   belongs_to :user
   belongs_to :activity
+  has_many :payments, dependent: :destroy
 
   #TODO: Add more specific validations, for example: validate if user is already assigned to activity
 
