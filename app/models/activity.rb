@@ -11,5 +11,4 @@ class Activity < ApplicationRecord
     validates :start_date, presence: true
     validates :end_date, presence: true
     validates :access_level, presence: true, inclusion: { in: %w(public private) }
-
 end
