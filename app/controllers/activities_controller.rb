@@ -10,6 +10,15 @@ class ActivitiesController < ApplicationController
 
   # GET /activities/1
   def show
+    comments = @activity.comments
+    comments = comments.map do |comment|
+      {
+        id: comment.id,
+        description: comment.description,
+        user: comment.user.name
+      }
+    end
+    @activity = @activity.as_json.merge( { comments: comments } )
     render json: @activity
   end
 

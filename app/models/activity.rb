@@ -1,5 +1,7 @@
 class Activity < ApplicationRecord
 
+    has_many :comments, dependent: :destroy
+
     validates :name, presence: true, length: { maximum: 50 }
     validates :description, presence: true,  length: { maximum: 500 }
     validates :activity_type, presence: true, inclusion: { in: %w(lunch trip party recreational_outlet) }
