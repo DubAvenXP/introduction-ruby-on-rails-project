@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_27_150636) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_27_162510) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -26,6 +26,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_27_150636) do
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "assignments", force: :cascade do |t|
+    t.string "role_assignment"
+    t.float "amount_to_pay"
+    t.bigint "user_id", null: false
+    t.bigint "activity_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_id"], name: "index_assignments_on_activity_id"
+    t.index ["user_id"], name: "index_assignments_on_user_id"
   end
 
   create_table "comments", force: :cascade do |t|
@@ -49,6 +60,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_27_150636) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "assignments", "activities"
+  add_foreign_key "assignments", "users"
   add_foreign_key "comments", "activities"
   add_foreign_key "comments", "users"
 end

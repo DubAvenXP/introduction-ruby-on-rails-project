@@ -12,7 +12,7 @@ module JsonWebToken
 
     def jwt_decode(token)
         if token
-            begin
+            begin 
                 decoded = JWT.decode(token, SECRET_KEY)[0]
                 HashWithIndifferentAccess.new decoded
             rescue JWT::VerificationError, JWT::DecodeError

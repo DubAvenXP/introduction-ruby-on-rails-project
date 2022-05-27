@@ -18,12 +18,26 @@ class ActivitiesController < ApplicationController
         user: comment.user.name
       }
     end
-    @activity = @activity.as_json.merge( { comments: comments } )
+
+    assignments = @activity.assignments
+    users = @activity.assignments.map do |assignment|
+      {
+        id: assignment.id,
+        role_assignment: assignment.role_assignment,
+        amount_to_pay: assignment.amount_to_pay,
+        user: assignment.user.name
+      }
+    end
+
+    @activity = @activity.as_json.merge({comments: comments, users: users})
+    
     render json: @activity
   end
 
   # POST /activities
   def create
+    # TODO: create assignment for logged user
+
     @activity = Activity.new(activity_params)
 
     if @activity.save
