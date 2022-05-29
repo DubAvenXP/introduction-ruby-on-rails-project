@@ -8,7 +8,10 @@ class Activity < ApplicationRecord
     validates :activity_type, presence: true, inclusion: { in: %w(lunch trip party recreational_outlet) }
     validates :location, presence: true, length: { maximum: 110 }
     validates :budget, presence: true, numericality: { greater_than_or_equal_to: 0, only_float: true }
+    #TODO: add validations for start_date and end_date
     validates :start_date, presence: true
     validates :end_date, presence: true
     validates :access_level, presence: true, inclusion: { in: %w(public private) }
+    validates :status, presence: true
+    validates :enrollment, presence: false
 end

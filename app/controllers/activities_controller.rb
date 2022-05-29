@@ -39,7 +39,6 @@ class ActivitiesController < ApplicationController
 
     @activity = Activity.new(activity_params)
     
-    
     if @activity.save
       create_assignment_for_owner
       render json: @activity, status: :created, location: @activity
@@ -50,6 +49,14 @@ class ActivitiesController < ApplicationController
 
   # PATCH/PUT /activities/1
   def update
+
+    is_owner = is_activity_owner?
+
+    unless is_owner
+      render json: { error: 'You are not the owner of this activity' }, status: :unauthorized
+      return
+    end
+
     if @activity.update(activity_params)
       render json: @activity
     else
@@ -70,16 +77,24 @@ class ActivitiesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def activity_params
-      params.require(:activity).permit(:name, :description, :activity_type, :location, :budget, :start_date, :end_date, :access_level, :status)
+      params.require(:activity).permit(:name, :description, :activity_type, :location, :budget, :start_date, :end_date, :access_level, :status, :enrollment)
     end
 
     # @return [Assignment]
     # @description Get the owner of the activity and create an assignment for it
-    #     *set_workflow*
     # @example
     #     assignment = create_assignment_for_owner
     def create_assignment_for_owner
       @assignment = Assignment.new(user_id: @current_user.id, activity_id: @activity.id, role_assignment: 'owner', amount_to_pay: @activity.budget)
       @assignment.save
+    end
+
+    # @return [Boolean]
+    # @description This method checks if the current user is the owner of the activity
+    # @example
+    #     is_owner = is_activity_owner?
+    def is_activity_owner?
+      owner = @activity.assignments.find_by(role_assignment: 'owner')
+      return owner.user_id == @current_user.id
     end
 end

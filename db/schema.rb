@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_27_180749) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_27_173147) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,19 +19,20 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_27_180749) do
     t.string "description"
     t.string "activity_type"
     t.string "location"
-    t.float "budget"
+    t.float "budget", default: 0.0
     t.datetime "start_date", precision: nil
     t.datetime "end_date", precision: nil
-    t.string "access_level"
-    t.string "status"
+    t.string "access_level", default: "public"
+    t.boolean "enrollment", default: true
+    t.boolean "status", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "enrollment", default: true
   end
 
   create_table "assignments", force: :cascade do |t|
     t.string "role_assignment"
-    t.float "amount_to_pay"
+    t.float "amount_to_pay", default: 0.0
+    t.boolean "status", default: true
     t.bigint "user_id", null: false
     t.bigint "activity_id", null: false
     t.datetime "created_at", null: false
