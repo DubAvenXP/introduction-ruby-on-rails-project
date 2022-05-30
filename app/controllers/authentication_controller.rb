@@ -1,7 +1,8 @@
 class AuthenticationController < ApplicationController
+    include Response
+
     skip_before_action :authenticate_request, only: [:login]
 
-    #POST /auth/login
     def login
         @user = User.find_by_email(params[:email])
         
@@ -14,10 +15,10 @@ class AuthenticationController < ApplicationController
                 email: @user.email,
                 role: @user.role,
             }
-
-            render json: { user: user, token: token }, status: :ok
+            
+            basic_response({ user: user, token: token }, :ok)
         else
-            render json: { error: 'Invalid email or password!!' }, status: :unauthorized
+            error_response('Invalid email or password', :unauthorized)
         end
     end
 end

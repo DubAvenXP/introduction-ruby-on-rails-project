@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::API
 
     include JsonWebToken
+    include Response
     
     before_action :authenticate_request
 
@@ -11,7 +12,7 @@ class ApplicationController < ActionController::API
         token = beared_token.split(' ').last if beared_token
         
         unless token
-            render json: { error: 'Not Authorized' }, status: :unauthorized
+            error_response('Not Authorized', :unauthorized)
             return
         end
         

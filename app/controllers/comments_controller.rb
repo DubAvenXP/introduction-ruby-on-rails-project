@@ -1,50 +1,35 @@
 class CommentsController < ApplicationController
+  include Response
+  
   before_action :set_comment, only: %i[ show update destroy ]
 
-  # GET /comments
   def index
     @comments = Comment.all
-
-    render json: @comments
+    basic_response(@comments, :ok)
   end
 
-  # GET /comments/1
   def show
-    render json: @comment
+    basic_response(@comment, :ok)
   end
 
-  # POST /comments
   def create
     @comment = Comment.new(comment_params)
-
-    if @comment.save
-      render json: @comment, status: :created, location: @comment
-    else
-      render json: @comment.errors, status: :unprocessable_entity
-    end
+    basic_response(@comment, :created, @comment.save)
   end
 
-  # PATCH/PUT /comments/1
   def update
-    if @comment.update(comment_params)
-      render json: @comment
-    else
-      render json: @comment.errors, status: :unprocessable_entity
-    end
+    basic_response(@comment, :ok, @comment.update(comment_params))
   end
 
-  # DELETE /comments/1
   def destroy
     @comment.destroy
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_comment
       @comment = Comment.find(params[:id])
     end
 
-    # Only allow a list of trusted parameters through.
     def comment_params
       params.require(:comment).permit(:description, :user_id, :activity_id)
     end
