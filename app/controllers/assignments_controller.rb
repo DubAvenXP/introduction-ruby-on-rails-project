@@ -30,13 +30,13 @@ class AssignmentsController < ApplicationController
       return
     end
 
-    unless @activity.enrollment
+    unless is_open_enrollment?
       render json: { error: 'The enrollments are closed' }, status: :forbidden
       return
     end
 
     if @assignment.save
-      update_amount_to_pay
+      update_users_amount_to_pay
       # TODO: notify_to_members
       assignment = Assignment.find(@assignment.id)
       render json: assignment, status: :created, location: @assignment
@@ -75,7 +75,7 @@ class AssignmentsController < ApplicationController
     # and return true if the user is already assigned to the activity
     # @example
     # previously_assigned?
-    def previously_assigned?
+    def is_previously_assigned?
       assignment = Assignment.where(user_id: @assignment.user_id, activity_id: @assignment.activity_id).first
       assignment.present?
     end
@@ -90,19 +90,6 @@ class AssignmentsController < ApplicationController
       return @activity.access_level == 'public'
     end
 
-    # @return [void]
-    # @description This method is used to update the amount to pay of each member of the activity
-    # Each time a member is assigned to an activity, the amount to pay of the member is updated
-    # @example
-    # update_amount_to_pay
-    def update_amount_to_pay
-      members = @activity.assignments.where(status: true)
-      amount_to_pay = @activity.budget / members.count
-      members.each do |member|
-        Assignment.update(member.id, amount_to_pay: amount_to_pay)
-      end
-    end
-
     # @return [Boolean]
     # @description This method checks if the current user is the owner of the activity
     # @example
@@ -112,4 +99,24 @@ class AssignmentsController < ApplicationController
       return owner.user_id == @current_user.id
     end
 
+    # @return [Boolean]
+    # @description This method return the current status of activity enrollment
+    # @example
+    #     is_owner = is_activity_owner?
+    def is_open_enrollment?
+      return @activity.enrollment
+    end
+
+    # @return [void]
+    # @description This method is used to update the amount to pay of each member of the activity
+    # Each time a member is assigned to an activity, the amount to pay of the member is updated
+    # @example
+    # update_amount_to_pay
+    def update_users_amount_to_pay
+      members_of_activity = @activity.assignments.where(status: true)
+      amount_to_pay = @activity.budget / members_of_activity.count
+      members.each do |member|
+        Assignment.update(member.id, amount_to_pay: amount_to_pay)
+      end
+    end
 end

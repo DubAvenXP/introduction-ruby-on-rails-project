@@ -50,9 +50,7 @@ class ActivitiesController < ApplicationController
   # PATCH/PUT /activities/1
   def update
 
-    is_owner = is_activity_owner?
-
-    unless is_owner
+    unless is_activity_owner?
       render json: { error: 'You are not the owner of this activity' }, status: :unauthorized
       return
     end
