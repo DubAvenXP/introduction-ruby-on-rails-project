@@ -1,6 +1,6 @@
 class CommentsController < ApplicationController
   include Response
-  
+  # TODO: investigate before_action and after_action
   before_action :set_comment, only: %i[ show update destroy ]
 
   def index
@@ -13,6 +13,7 @@ class CommentsController < ApplicationController
   end
 
   def create
+    #TODO: comment validations
     @comment = Comment.new(comment_params)
     basic_response(@comment, :created, @comment.save)
   end

@@ -16,10 +16,13 @@ module AssignmentHelpers
     # @example
     # previously_assigned?
     def is_previously_assigned?
-        assignment = Assignment.where(user_id: @assignment.user_id, activity_id: @assignment.activity_id).first
-        assignment.present?
+        Assignment.exists?(user_id: @assignment.user_id, activity_id: @assignment.activity_id).first
     end
 
+    # @return [boolean]
+    # @description This method is used to verify if the current user try to assign himself to the activity
+    # @example
+    # is_assignment_to_himself?
     def is_assignment_to_himself?
         @assignment.user_id == @current_user.id
     end
