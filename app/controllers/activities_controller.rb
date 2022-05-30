@@ -22,10 +22,11 @@ class ActivitiesController < ApplicationController
     assignments = @activity.assignments
     users = @activity.assignments.map do |assignment|
       {
-        id: assignment.id,
+        assignment_id: assignment.id,
         role_assignment: assignment.role_assignment,
         amount_to_pay: assignment.amount_to_pay,
-        user: assignment.user.name
+        user: assignment.user.name,
+        user_id: assignment.user.id
       }
     end
 
