@@ -18,7 +18,7 @@ class AssignmentsController < ApplicationController
     @assignment = Assignment.new(assignment_params)
     @activity = Activity.find(@assignment.activity_id)
 
-    if previously_assigned?
+    if is_previously_assigned?
       render json: { error: 'User already assigned to activity' }, status: :forbidden
       return
     end
@@ -115,7 +115,7 @@ class AssignmentsController < ApplicationController
     def update_users_amount_to_pay
       members_of_activity = @activity.assignments.where(status: true)
       amount_to_pay = @activity.budget / members_of_activity.count
-      members.each do |member|
+      members_of_activity.each do |member|
         Assignment.update(member.id, amount_to_pay: amount_to_pay)
       end
     end
