@@ -19,13 +19,12 @@ export const useAppStore = defineStore('app', {
     async login(payload) {
       try {
         const { data } = await api.post('/auth/login', payload);
-        console.log(data);
-        // if (body.token) {
-        //   localStorage.setItem('token', body.token);
-        //   localStorage.setItem('user', JSON.stringify(body.user));
-        // }
+        if (data.token) {
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('user', JSON.stringify(data.user));
+        }
       } catch (error) {
-
+        return error.response;
       }
     }
   },
