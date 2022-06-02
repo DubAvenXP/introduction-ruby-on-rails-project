@@ -5,8 +5,8 @@ export const useAppStore = defineStore('app', {
 
   state: () => ({
     isLoading: false,
-    user: null,
-    token: null,
+    user: JSON.parse(localStorage.getItem('user')) || null,
+    token: localStorage.getItem('token') || null,
   }),
 
   getters: {
@@ -26,6 +26,12 @@ export const useAppStore = defineStore('app', {
       } catch (error) {
         return error.response;
       }
+    },
+    logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      this.user = null;
+      this.token = null;
     }
   },
 

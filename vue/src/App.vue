@@ -3,9 +3,13 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent } from "vue";
+import { useAppStore } from "src/stores/application-store";
 
 export default defineComponent({
-  name: 'App'
-})
+  name: "App",
+  setup() {
+    useAppStore();
+  },
+});
 </script>

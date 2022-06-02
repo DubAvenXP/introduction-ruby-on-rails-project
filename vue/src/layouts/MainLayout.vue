@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
-      <q-toolbar>
+      <q-toolbar class="flex justify-between">
         <q-btn
           flat
           dense
@@ -11,9 +11,9 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title> Lomax Technologies </q-toolbar-title>
+        <span class="text-h6"> Lomax Technologies </span>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <q-btn flat round icon="logout" />
       </q-toolbar>
     </q-header>
 
