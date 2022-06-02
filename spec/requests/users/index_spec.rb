@@ -11,9 +11,7 @@ RSpec.describe "UsersController", type: :request do
       response_body = JSON.parse(response.body)
       expect(response).to have_http_status(:ok)
       expect(response.content_type).to eq("application/json; charset=utf-8")
-      
-      puts "get --->"
-      puts response_body
+    
       # Custom specs
       expect(response_body).to be_a(Array)
       expect(response_body.length).to be > 0

@@ -7,8 +7,6 @@ end
 RSpec.shared_context "shared stuff", :shared_context => :metadata do
     # Authentication
     
-    SECRET_KEY = Rails.application.secrets.secret_key_base
-
     before { 
         @user = create(:user)
         @current_user = { 
@@ -18,7 +16,7 @@ RSpec.shared_context "shared stuff", :shared_context => :metadata do
             role: @user.role,
             token: JWT.encode({
                 sub: @user.id, exp: (8.hours.from_now).to_i
-            }, SECRET_KEY)
+            }, Rails.application.secrets.secret_key_base)
         }
     }
     def shared_method
