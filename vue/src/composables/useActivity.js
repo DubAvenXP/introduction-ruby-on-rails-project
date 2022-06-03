@@ -20,6 +20,15 @@ const useActivity = () => {
     capitalize: (str) => {
       return str.charAt(0).toUpperCase() + str.slice(1);
     },
+    getValue: (value, currency = 'Q.') => {
+      // transform to decimal
+      const decimal = parseFloat(value);
+      return `${currency} ${decimal.toFixed(2)} `;
+    },
+    getRoleAssignment: (roleAssignment) => {
+      if (roleAssignment === "owner") return "Organizador";
+      if (roleAssignment !== "owner") return "Miembro";
+    }
 
   };
 };

@@ -5,8 +5,8 @@
       <activity-banner :title="activity.name"></activity-banner>
       <div class="content q-pa-lg">
         <activity-details :activity="activity"></activity-details>
-        <activity-members :activity="activity"></activity-members>
-        <activity-details :activity="activity"></activity-details>
+        <activity-members :members="activity.users"></activity-members>
+        <activity-comments :comments="activity.comments"></activity-comments>
       </div>
     </section>
   </q-page>
@@ -30,6 +30,9 @@ export default defineComponent({
     activityMembers: defineAsyncComponent(() =>
       import("src/components/activity/ActivityMembers.vue")
     ),
+    activityComments: defineAsyncComponent(() =>
+      import("src/components/activity/ActivityComments.vue")
+    ),
   },
   setup() {
     const route = useRoute();
@@ -51,7 +54,7 @@ export default defineComponent({
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  grid-auto-rows: 450px;
+  grid-auto-rows: auto;
   gap: 2rem;
 }
 </style>

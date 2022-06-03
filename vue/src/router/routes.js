@@ -14,7 +14,7 @@ const routes = [
         component: () => import('pages/ActivitiesPage.vue'),
       },
       {
-        path: '/activity/:id',
+        path: '/activities/:id',
         name: 'activity',
         component: () => import('pages/ActivityPage.vue'),
       },

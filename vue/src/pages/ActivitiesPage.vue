@@ -4,7 +4,7 @@
       <span class="text-h3">Actividades</span>
       <q-btn color="primary" icon="add_circle" label="Nueva actividad" />
     </div>
-    <q-separator class="q-mt-md" />
+
     <h3 v-if="isLoading">Cargando...</h3>
     <section v-else class="q-mt-md activities">
       <activity-card

@@ -33,6 +33,7 @@ export const useAppStore = defineStore('app', {
       this.user = null;
       this.token = null;
     }
+
   },
 
 });
