@@ -14,6 +14,21 @@ const routes = [
         component: () => import('pages/ActivitiesPage.vue'),
       },
       {
+        path: '/activities/create',
+        name: 'create-activity',
+        component: () => import('pages/NewActivityPage.vue'),
+      },
+      {
+        path: '/activities/enrolled',
+        name: 'enrolled-activities',
+        component: () => import('pages/EnrolledActivitiesPage.vue'),
+      },
+      {
+        path: '/activities/created',
+        name: 'created-activities',
+        component: () => import('pages/CreatedActivitiesPage.vue'),
+      },
+      {
         path: '/activities/:id',
         name: 'activity',
         component: () => import('pages/ActivityPage.vue'),

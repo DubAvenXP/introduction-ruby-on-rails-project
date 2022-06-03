@@ -17,7 +17,7 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="drawer" show-if-above :width="200" :breakpoint="400">
+    <q-drawer v-model="drawer" show-if-above :width="225" :breakpoint="500">
       <q-scroll-area
         style="
           height: calc(100% - 150px);
@@ -26,36 +26,39 @@
         "
       >
         <q-list padding>
-          <q-item clickable v-ripple>
+          <q-item :to="{ name: 'activities' }" clickable v-ripple>
             <q-item-section avatar>
-              <q-icon name="inbox" />
+              <q-icon name="public" />
             </q-item-section>
-
-            <q-item-section> Inbox </q-item-section>
+            <q-item-section> Explorar </q-item-section>
           </q-item>
 
-          <q-item active clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon name="star" />
-            </q-item-section>
-
-            <q-item-section> Star </q-item-section>
+          <q-separator spaced />
+          <q-item>
+            <q-item-section> Actividades </q-item-section>
           </q-item>
 
-          <q-item clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon name="send" />
+          <q-item :to="{ name: 'create-activity' }" clickable v-ripple>
+            <q-item-section avatar class="q-pl-md">
+              <q-icon name="add_circle" />
             </q-item-section>
-
-            <q-item-section> Send </q-item-section>
+            <q-item-section> Crear </q-item-section>
           </q-item>
 
-          <q-item clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon name="drafts" />
+          <q-item :to="{ name: 'created-activities' }" clickable v-ripple>
+            <q-item-section avatar class="q-pl-md">
+              <q-icon name="archive" />
             </q-item-section>
 
-            <q-item-section> Drafts </q-item-section>
+            <q-item-section> Creadas </q-item-section>
+          </q-item>
+
+          <q-item :to="{ name: 'enrolled-activities' }" clickable v-ripple>
+            <q-item-section avatar class="q-pl-md">
+              <q-icon name="calendar_month" />
+            </q-item-section>
+
+            <q-item-section> Inscrito </q-item-section>
           </q-item>
         </q-list>
       </q-scroll-area>
@@ -69,8 +72,8 @@
           <q-avatar size="75px" class="q-mb-sm">
             <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
           </q-avatar>
-          <div class="text-weight-bold">Razvan Stoenescu</div>
-          <div>@rstoenescu</div>
+          <div class="text-weight-bold">{{ user.name }}</div>
+          <div>{{ user.email }}</div>
         </div>
       </q-img>
     </q-drawer>
@@ -82,66 +85,22 @@
 </template>
 
 <script>
-import { useAppStore } from "src/stores/application-store";
+import useAuth from "src/composables/useAuth";
 import { defineComponent, ref } from "vue";
-import { useRouter } from "vue-router";
-
-const menuList = [
-  {
-    icon: "inbox",
-    label: "Actividades",
-    separator: false,
-  },
-  {
-    icon: "send",
-    label: "Outbox",
-    separator: false,
-  },
-  {
-    icon: "delete",
-    label: "Trash",
-    separator: false,
-  },
-  {
-    icon: "error",
-    label: "Spam",
-    separator: true,
-  },
-  {
-    icon: "settings",
-    label: "Settings",
-    separator: false,
-  },
-  {
-    icon: "feedback",
-    label: "Send Feedback",
-    separator: false,
-  },
-  {
-    icon: "help",
-    iconColor: "primary",
-    label: "Help",
-    separator: false,
-  },
-];
 
 export default defineComponent({
   name: "MainLayout",
 
   setup() {
     const drawer = ref(false);
-    const store = useAppStore();
-    const router = useRouter();
+    const { user, logout } = useAuth();
     return {
       drawer,
       toggleLeftDrawer() {
         drawer.value = !drawer.value;
       },
-      menuList,
-      logout() {
-        store.logout();
-        router.push("/login");
-      },
+      user,
+      logout,
     };
   },
 });

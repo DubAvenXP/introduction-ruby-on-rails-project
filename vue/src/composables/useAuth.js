@@ -1,7 +1,7 @@
 import { useQuasar } from 'quasar';
 import { useAppStore } from "src/stores/application-store";
 import { useRouter } from 'vue-router';
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 const useAuth = () => {
   const $q = useQuasar();
@@ -54,6 +54,11 @@ const useAuth = () => {
         qForm.value.resetValidation();
       }
     },
+    user: computed(() => store.user),
+    logout: () => {
+      store.logout();
+      router.push("/login");
+    }
   };
 
 };

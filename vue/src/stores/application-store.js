@@ -22,6 +22,8 @@ export const useAppStore = defineStore('app', {
         if (data.token) {
           localStorage.setItem('token', data.token);
           localStorage.setItem('user', JSON.stringify(data.user));
+          this.token = data.token;
+          this.user = data.user;
         }
       } catch (error) {
         return error.response;
