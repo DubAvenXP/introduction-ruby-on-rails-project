@@ -1,12 +1,18 @@
 import { useUserStore } from "src/stores/user-store";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 
 const useUser = () => {
   const store = useUserStore();
+
+  const userConfirmModal = ref(false);
+  const selectedUser = ref(null);
   return {
     fetchUsers: async () => {
       await store.fetchUsers();
     },
+    userModal: ref(false),
+    userConfirmModal,
+    selectedUser,
     users: computed(() => store.users),
     user: computed(() => store.user),
     isLoading: computed(() => store.isLoading),
@@ -36,7 +42,8 @@ const useUser = () => {
       },
     ],
     deleteUser: (user) => {
-      console.log(user);
+      userConfirmModal.value = true;
+      selectedUser.value = user;
     },
     editUser: (user) => {
       console.log(user);
