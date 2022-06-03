@@ -33,6 +33,11 @@ const routes = [
         name: 'activity',
         component: () => import('pages/ActivityPage.vue'),
       },
+      {
+        path: '/users',
+        name: 'users',
+        component: () => import('pages/UsersPage.vue'),
+      }
     ]
   },
   {

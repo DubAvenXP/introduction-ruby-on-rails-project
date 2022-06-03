@@ -1,5 +1,5 @@
 <template>
-  <q-page>
+  <q-page class="q-py-lg q-px-md">
     <h1>Enrolled activities</h1>
   </q-page>
 </template>

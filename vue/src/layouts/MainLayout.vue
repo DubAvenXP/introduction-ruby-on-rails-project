@@ -34,6 +34,14 @@
           </q-item>
 
           <q-separator spaced />
+          <q-item :to="{ name: 'users' }" clickable v-ripple>
+            <q-item-section avatar>
+              <q-icon name="group" />
+            </q-item-section>
+            <q-item-section> Usuarios </q-item-section>
+          </q-item>
+
+          <q-separator spaced />
           <q-item>
             <q-item-section> Actividades </q-item-section>
           </q-item>
@@ -72,8 +80,8 @@
           <q-avatar size="75px" class="q-mb-sm">
             <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
           </q-avatar>
-          <div class="text-weight-bold">{{ user.name }}</div>
-          <div>{{ user.email }}</div>
+          <div class="text-weight-bold">{{ user?.name }}</div>
+          <div>{{ user?.email }}</div>
         </div>
       </q-img>
     </q-drawer>

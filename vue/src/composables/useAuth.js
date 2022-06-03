@@ -1,11 +1,11 @@
 import { useQuasar } from 'quasar';
-import { useAppStore } from "src/stores/application-store";
+import { useAuthStore } from "src/stores/auth-store";
 import { useRouter } from 'vue-router';
 import { computed, ref } from "vue";
 
 const useAuth = () => {
   const $q = useQuasar();
-  const store = useAppStore();
+  const store = useAuthStore();
   const router = useRouter();
   const qForm = ref(null);
   const isVisiblePassword = ref(false);

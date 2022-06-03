@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { api } from 'src/boot/axios';
 
-export const useAppStore = defineStore('app', {
+export const useAuthStore = defineStore('auth', {
 
   state: () => ({
     isLoading: false,

@@ -4,12 +4,12 @@
 
 <script>
 import { defineComponent } from "vue";
-import { useAppStore } from "src/stores/application-store";
+import { useAuthStore } from "src/stores/auth-store";
 
 export default defineComponent({
   name: "App",
   setup() {
-    useAppStore();
+    useAuthStore();
   },
 });
 </script>
