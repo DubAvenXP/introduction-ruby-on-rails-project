@@ -16,7 +16,7 @@ module AssignmentHelpers
     # @example
     # previously_assigned?
     def is_previously_assigned?
-        Assignment.exists?(user_id: @assignment.user_id, activity_id: @assignment.activity_id).first
+        Assignment.exists?(user_id: @assignment.user_id, activity_id: @assignment.activity_id)
     end
 
     # @return [boolean]

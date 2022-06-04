@@ -6,7 +6,8 @@ class PaymentsController < ApplicationController
   before_action :set_payment, only: %i[ show update destroy ]
 
   def index
-    @payments = Payment.all
+    assignment_id = params[:assignment_id]
+    @payments = Payment.where(assignment_id: assignment_id)
     basic_response(@payments, :ok)
   end
 
@@ -15,8 +16,11 @@ class PaymentsController < ApplicationController
   end
 
   def create
-    @payment = Payment.new(payment_params)
-    @activity = Assignment.find(params[:assignment_id]).activity
+    assignment_id = params[:assignment_id]
+    merged_params = payment_params.merge(assignment_id: assignment_id)
+    
+    @payment = Payment.new(merged_params)
+    @activity = Assignment.find(assignment_id).activity
     
     if is_open_enrollment?
       error_response("You can't pay if the enrollment is open", :bad_request)
@@ -39,14 +43,6 @@ class PaymentsController < ApplicationController
     end
 
     basic_response(@payment, :created, @payment.save)
-  end
-
-  def update
-    basic_response(@payment, :ok, @payment.update(payment_params))
-  end
-
-  def destroy
-    @payment.destroy
   end
 
   private
