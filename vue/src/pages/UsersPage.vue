@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-py-lg q-px-md">
     <div class="flex justify-between items-center">
-      <span class="text-h3">Usuarios</span>
+      <span class="text-h4">Usuarios</span>
       <q-btn
         color="primary"
         icon="add_circle"

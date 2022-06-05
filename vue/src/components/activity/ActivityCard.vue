@@ -21,12 +21,12 @@
     </q-card-section>
 
     <q-card-actions align="right" class="flex items-center">
-      <router-link
-        class="q-btn cursor-pointer q-btn--flat text-dark q-btn--dense"
+      <q-btn
         :to="{ name: 'activity', params: { id: activity.id } }"
-      >
-        Detalles
-      </router-link>
+        flat
+        color="dark"
+        label="Detalles"
+      />
       <q-btn flat color="primary" label="Asistir" />
     </q-card-actions>
 

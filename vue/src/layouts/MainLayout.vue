@@ -58,7 +58,7 @@
               <q-icon name="archive" />
             </q-item-section>
 
-            <q-item-section> Creadas </q-item-section>
+            <q-item-section> Mis actividades </q-item-section>
           </q-item>
 
           <q-item :to="{ name: 'enrolled-activities' }" clickable v-ripple>

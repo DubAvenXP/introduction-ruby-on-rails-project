@@ -3,7 +3,7 @@ import { ref } from "vue";
 
 const useActivity = () => {
   const store = useActivityStore();
-  const activityForm = ref({
+  const newActivity = ref({
     name: '',
     description: '',
     activity_type: '',
@@ -13,9 +13,10 @@ const useActivity = () => {
     end_date: '',
     access_level: '',
   });
+
   return {
     getImage: type => store.getActivityImageByType(type),
-    activityForm,
+    newActivity,
     getStartDate: (start_date) => {
       const date = new Date(start_date);
       return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
@@ -41,6 +42,8 @@ const useActivity = () => {
       if (roleAssignment === "owner") return "Organizador";
       if (roleAssignment !== "owner") return "Miembro";
     },
+    activityTypes: ['lunch', 'trip', 'party', 'recreational_outlet',],
+    accessLevels: ['public', 'private'],
 
 
   };

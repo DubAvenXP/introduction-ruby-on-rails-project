@@ -1,7 +1,7 @@
 <template>
   <q-table
     bordered
-    class="q-mt-lg"
+    class="q-mt-lg user-table"
     :rows="rows"
     :columns="columns"
     row-key="name"
@@ -52,4 +52,8 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+// .user-table {
+//   max-width: 1080px;
+// }
+</style>

@@ -1,8 +1,13 @@
 <template>
   <q-page class="q-py-lg q-px-md">
     <div class="flex justify-between items-center">
-      <span class="text-h3">Actividades</span>
-      <q-btn color="primary" icon="add_circle" label="Nueva actividad" />
+      <span class="text-h4">Actividades</span>
+      <q-btn
+        :to="{ name: 'create-activity' }"
+        color="primary"
+        icon="add_circle"
+        label="Nueva actividad"
+      />
     </div>
 
     <h3 v-if="isLoading">Cargando...</h3>

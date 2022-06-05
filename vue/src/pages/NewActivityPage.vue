@@ -1,17 +1,20 @@
 <template>
   <q-page class="q-py-lg q-px-md">
-    <h1>New activity!</h1>
+    <span class="text-h4">Nueva actividad</span>
+    <section class="q-mt-md">
+      <activity-form></activity-form>
+    </section>
   </q-page>
 </template>
 
 <script>
-import { defineComponent } from "vue";
-
+import { defineAsyncComponent, defineComponent } from "vue";
 export default defineComponent({
   name: "NewActivityPage",
-  components: {},
-  setup() {
-    return {};
+  components: {
+    activityForm: defineAsyncComponent(() =>
+      import("src/components/activity/ActivityForm")
+    ),
   },
 });
 </script>
