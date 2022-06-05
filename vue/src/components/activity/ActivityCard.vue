@@ -22,12 +22,26 @@
 
     <q-card-actions align="right" class="flex items-center">
       <q-btn
+        v-if="isMyActivitiesView"
+        flat
+        color="red"
+        label="Eliminar"
+        @click="deleteActivity"
+      />
+      <q-btn
         :to="{ name: 'activity', params: { id: activity.id } }"
         flat
         color="dark"
         label="Detalles"
       />
-      <q-btn flat color="primary" label="Asistir" />
+      <q-btn
+        v-if="isMyActivitiesView"
+        flat
+        color="primary"
+        label="Editar"
+        :to="{ name: 'edit-activity', params: { id: activity.id } }"
+        @click="setActivityToStore(activity)"
+      />
     </q-card-actions>
 
     <q-chip
@@ -49,15 +63,28 @@ export default defineComponent({
       type: Object,
       required: true,
     },
+    isMyActivitiesView: {
+      type: Boolean,
+      default: false,
+    },
   },
-  setup(props) {
-    const { getEnrollmentStatus, getStartDate, getImage, capitalize } =
-      useActivity();
+  setup(props, { emit }) {
+    const {
+      getEnrollmentStatus,
+      getStartDate,
+      getImage,
+      capitalize,
+      setActivityToStore,
+    } = useActivity();
     return {
       getEnrollmentStatus,
       getStartDate,
       getImage,
       capitalize,
+      setActivityToStore,
+      deleteActivity() {
+        emit("delete-activity", props.activity);
+      },
     };
   },
 });

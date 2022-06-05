@@ -2,7 +2,7 @@
   <article class="q-py-md q-pr-md q-card--bordered">
     <div class="flex justify-between q-mb-md">
       <span class="text-h4 q-pl-md">Participantes</span>
-      <q-btn color="primary" icon="person_add" label="Invitar" />
+      <q-btn color="primary" icon="person_add" label="Asistir" />
     </div>
     <q-list class="q-pt-md q-pr-md">
       <q-item v-for="member in members" :key="member.id">

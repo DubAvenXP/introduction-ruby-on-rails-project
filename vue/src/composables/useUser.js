@@ -1,10 +1,10 @@
-import { useQuasar } from "quasar";
 import { useUserStore } from "src/stores/user-store";
 import { computed, ref } from "vue";
+import useNotify from "./useNotify";
 
 const useUser = () => {
   const store = useUserStore();
-  const $q = useQuasar();
+  const { notifyError, notifySuccess } = useNotify();
   const newUser = ref({
     id: null,
     name: "",
@@ -84,54 +84,29 @@ const useUser = () => {
       delete user.password_confirmation;
       const error = await store.updateUser(user);
       if (error) {
-        $q.notify({
-          color: "negative",
-          message: "Ocurrio un error al actualizar al usuario",
-          position: "bottom-right",
-        });
+        notifyError("Ocurrio un error al actualizar al usuario");
         return;
       }
       store.userModalVisibility = false;
-      $q.notify({
-        color: "positive",
-        message: "Usuario actualizado correctamente",
-        position: "bottom-right",
-      });
+      notifySuccess("Usuario actualizado correctamente");
     },
     onCreate: async (user) => {
       const error = await store.createUser(user);
       if (error) {
-        $q.notify({
-          color: "negative",
-          message: "Ocurrio un error al crear el usuario",
-          position: "bottom-right",
-        });
+        notifyError("Ocurrio un error al crear al usuario");
         return;
       }
       store.userModalVisibility = false;
-      $q.notify({
-        color: "positive",
-        message: "usuario creado correctamente",
-        position: "bottom-right",
-      });
-
+      notifySuccess("Usuario creado correctamente");
     },
     onDelete: async () => {
       const error = await store.deleteUser(store.user?.id);
       if (error) {
-        $q.notify({
-          color: "negative",
-          message: "Ocurrio un error al eliminar al usuario",
-          position: "bottom-right",
-        });
+        notifyError("Ocurrio un error al eliminar al usuario");
         return;
       }
       store.confirmModalVisibility = false;
-      $q.notify({
-        color: "positive",
-        message: "Usuario eliminado correctamente",
-        position: "bottom-right",
-      });
+      notifySuccess("Usuario eliminado correctamente");
     },
   };
 };

@@ -19,6 +19,11 @@ const routes = [
         component: () => import('pages/NewActivityPage.vue'),
       },
       {
+        path: '/activities/edit/:id',
+        name: 'edit-activity',
+        component: () => import('pages/NewActivityPage.vue'),
+      },
+      {
         path: '/activities/enrolled',
         name: 'enrolled-activities',
         component: () => import('pages/EnrolledActivitiesPage.vue'),
@@ -47,6 +52,7 @@ const routes = [
   },
   {
     path: '/:catchAll(.*)*',
+    name: 'not-found',
     component: () => import('pages/ErrorNotFound.vue')
   }
 ];

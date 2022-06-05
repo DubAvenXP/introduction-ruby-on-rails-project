@@ -1,8 +1,66 @@
+<script>
+import useActivity from "src/composables/useActivity";
+import { defineComponent } from "vue";
+
+export default defineComponent({
+  name: "ActivityForm",
+  components: {},
+  setup() {
+    const {
+      isLoading,
+      newActivity,
+      activity,
+      isEditable,
+      activityTypes,
+      accessLevels,
+      activityForm,
+      onCreate,
+      onReset,
+      onUpdate,
+    } = useActivity();
+
+    if (isEditable && activity.value) {
+      newActivity.value.name = activity.value.name;
+      newActivity.value.description = activity.value.description;
+      newActivity.value.activity_type = activity.value.activity_type;
+      newActivity.value.access_level = activity.value.access_level;
+      newActivity.value.start_date = activity.value.start_date;
+      newActivity.value.end_date = activity.value.end_date;
+      newActivity.value.location = activity.value.location;
+      newActivity.value.budget = activity.value.budget;
+    }
+
+    return {
+      isLoading,
+      isEditable,
+      newActivity,
+      activityTypes,
+      accessLevels,
+      activityForm,
+      onCreate,
+      onReset,
+      onUpdate,
+    };
+  },
+});
+</script>
+
 <template>
-  <q-form class="q-gutter-md q-mt-md form">
+  <q-form
+    @submit.prevent="isEditable ? onUpdate() : onCreate()"
+    @reset="onReset"
+    class="q-gutter-md q-mt-md form"
+    ref="activityForm"
+  >
     <q-card>
       <q-card-section class="content">
-        <q-input v-model="newActivity.name" type="text" label="Nombre">
+        <q-input
+          v-model="newActivity.name"
+          type="text"
+          label="Nombre"
+          lazy-rules
+          :rules="[(val) => val.length > 0 || 'El nombre es requerido']"
+        >
           <template v-slot:before>
             <q-icon name="drive_file_rename_outline" />
           </template>
@@ -13,6 +71,9 @@
           type="textarea"
           label="Descripción"
           rows="2"
+          maxlength="145"
+          lazy-rules
+          :rules="[(val) => val.length > 0 || 'La descripción es requerida']"
         >
           <template v-slot:before>
             <q-icon name="description" />
@@ -23,6 +84,10 @@
           v-model="newActivity.activity_type"
           :options="activityTypes"
           label="Tipo de actividad"
+          lazy-rules
+          :rules="[
+            (val) => val.length > 0 || 'El tipo de actividad es requerido',
+          ]"
         >
           <template v-slot:before>
             <q-icon name="assignment" />
@@ -33,19 +98,37 @@
           v-model="newActivity.access_level"
           :options="accessLevels"
           label="Nivel de acceso"
+          lazy-rules
+          :rules="[
+            (val) => val.length > 0 || 'El nivel de acceso es requerido',
+          ]"
         >
           <template v-slot:before>
             <q-icon name="public" />
           </template>
         </q-select>
 
-        <q-input v-model="newActivity.location" type="text" label="Ubicación">
+        <q-input
+          v-model="newActivity.location"
+          type="text"
+          label="Ubicación"
+          lazy-rules
+          :rules="[(val) => val.length > 0 || 'La ubicación es requerida']"
+        >
           <template v-slot:before>
             <q-icon name="pin_drop" />
           </template>
         </q-input>
 
-        <q-input v-model="newActivity.budget" type="number" label="Presupuesto">
+        <q-input
+          v-model="newActivity.budget"
+          type="number"
+          label="Presupuesto"
+          lazy-rules
+          :rules="[
+            (val) => val >= 0 || 'El presupuesto debe ser mayor o igual a 0',
+          ]"
+        >
           <template v-slot:before>
             <q-icon name="payments" />
           </template>
@@ -54,7 +137,14 @@
         <div>
           <span class="text-dark text-subtitle1">Fecha y hora de inicio</span>
           <div class="flex q-mt-sm wrap">
-            <q-input v-model="newActivity.start_date">
+            <q-input
+              v-model="newActivity.start_date"
+              lazy-rules
+              :rules="[
+                (val) =>
+                  val.length > 0 || 'La fecha y hora de inicio es requerida',
+              ]"
+            >
               <template v-slot:prepend>
                 <q-icon name="event" class="cursor-pointer">
                   <q-popup-proxy
@@ -98,11 +188,19 @@
         </div>
 
         <div>
-          <span class="text-dark text-subtitle1"
-            >Fecha y hora de finalización</span
-          >
+          <span class="text-dark text-subtitle1">
+            Fecha y hora de finalización
+          </span>
           <div class="flex q-mt-sm wrap">
-            <q-input v-model="newActivity.end_date">
+            <q-input
+              v-model="newActivity.end_date"
+              lazy-rules
+              :rules="[
+                (val) =>
+                  val.length > 0 ||
+                  'La fecha y hora de finalizacion es requerida',
+              ]"
+            >
               <template v-slot:prepend>
                 <q-icon name="event" class="cursor-pointer">
                   <q-popup-proxy
@@ -147,30 +245,16 @@
       </q-card-section>
 
       <q-card-actions align="right">
-        <q-btn color="dark" label="Cancelar" />
-        <q-btn color="primary" label="Crear" />
+        <q-btn v-if="!isEditable" type="reset" color="dark" label="Reiniciar" />
+        <q-btn
+          type="submit"
+          color="primary"
+          :label="isEditable ? 'Editar' : 'Crear'"
+        />
       </q-card-actions>
     </q-card>
   </q-form>
 </template>
-
-<script>
-import useActivity from "src/composables/useActivity";
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  name: "ActivityForm",
-  components: {},
-  setup() {
-    const { newActivity, activityTypes, accessLevels } = useActivity();
-    return {
-      newActivity,
-      activityTypes,
-      accessLevels,
-    };
-  },
-});
-</script>
 
 <style lang="scss" scoped>
 .form {
@@ -179,6 +263,6 @@ export default defineComponent({
 .content {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 4px;
 }
 </style>

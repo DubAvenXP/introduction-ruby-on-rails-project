@@ -8,6 +8,8 @@ export const useActivityStore = defineStore('activity', {
     isLoading: false,
     activities: [],
     activity: null,
+    createdActivity: null,
+    isEditable: false,
     types: [
       { name: 'lunch', image: 'https://images.pexels.com/photos/821054/pexels-photo-821054.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' },
       { name: 'trip', image: 'https://images.pexels.com/photos/8894329/pexels-photo-8894329.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' },
@@ -23,10 +25,14 @@ export const useActivityStore = defineStore('activity', {
   },
 
   actions: {
-    async fetchActivities() {
+    async fetchActivities(user_id) {
       try {
         this.isLoading = true;
-        const { data } = await api.get('/activities');
+        const { data } = await api.get('/activities', {
+          params: {
+            user_id,
+          }
+        });
         this.activities = data;
         this.isLoading = false;
       } catch (error) {
@@ -40,6 +46,37 @@ export const useActivityStore = defineStore('activity', {
         this.activity = data;
         this.isLoading = false;
         return this.activity;
+      } catch (error) {
+        return error.response;
+      }
+    },
+    async createActivity(activity) {
+      try {
+        this.isLoading = true;
+        const { data } = await api.post('/activities', activity);
+        this.createdActivity = data;
+        this.fetchActivities();
+        this.isLoading = false;
+      } catch (error) {
+        return error.response;
+      }
+    },
+    async updateActivity(activity) {
+      try {
+        this.isLoading = true;
+        const { data } = await api.put(`/activities/${this.activity.id}`, activity);
+        this.createdActivity = data;
+        this.isLoading = false;
+      } catch (error) {
+        return error.response;
+      }
+    },
+    async deleteActivity(id) {
+      try {
+        this.isLoading = true;
+        await api.delete(`/activities/${id}`);
+        this.fetchActivities();
+        this.isLoading = false;
       } catch (error) {
         return error.response;
       }

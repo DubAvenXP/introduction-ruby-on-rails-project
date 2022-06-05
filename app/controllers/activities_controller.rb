@@ -7,6 +7,14 @@ class ActivitiesController < ApplicationController
   before_action :set_activity, only: %i[ show update destroy ]
 
   def index
+    user_id = params[:user_id]
+    
+    if user_id
+      @activities = Activity.joins(:assignments).where(assignments: {user_id: user_id, role_assignment: 'owner'})
+      basic_response(@activities, :ok)
+      return
+    end
+
     @activities = Activity.all
     basic_response(@activities, :ok)
   end
@@ -32,7 +40,13 @@ class ActivitiesController < ApplicationController
       return
     end
 
-    basic_response(@activity, :ok, @activity.update(activity_params))
+    if @activity.update(activity_params)
+      update_assignments_amount_to_pay
+      basic_response(@activity, :ok)
+    else
+      error_response(@activity.errors, :unprocessable_entity)
+    end
+
   end
 
   def destroy

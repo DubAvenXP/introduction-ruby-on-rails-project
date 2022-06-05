@@ -1,10 +1,7 @@
 <template>
   <article class="q-py-md q-pr-md q-card--bordered">
-    <div class="flex justify-between q-mb-md">
-      <span class="text-h4 q-pl-md">Detalles</span>
-      <q-btn color="primary" icon="edit" />
-    </div>
-    <q-list class="q-pt-md q-pr-md">
+    <span class="text-h4 q-pl-md">Detalles</span>
+    <q-list class="q-pr-md">
       <q-item>
         <q-item-section>{{ activity.description }}</q-item-section>
       </q-item>

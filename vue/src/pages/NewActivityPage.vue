@@ -1,6 +1,6 @@
 <template>
   <q-page class="q-py-lg q-px-md">
-    <span class="text-h4">Nueva actividad</span>
+    <span class="text-h4">{{ isEditable ? "Editar" : "Nueva" }} actividad</span>
     <section class="q-mt-md">
       <activity-form></activity-form>
     </section>
@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import useActivity from "src/composables/useActivity";
 import { defineAsyncComponent, defineComponent } from "vue";
 export default defineComponent({
   name: "NewActivityPage",
@@ -15,6 +16,10 @@ export default defineComponent({
     activityForm: defineAsyncComponent(() =>
       import("src/components/activity/ActivityForm")
     ),
+  },
+  setup() {
+    const { isEditable } = useActivity();
+    return { isEditable };
   },
 });
 </script>
