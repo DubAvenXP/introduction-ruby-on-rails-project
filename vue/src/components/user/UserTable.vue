@@ -5,6 +5,7 @@
     :rows="rows"
     :columns="columns"
     row-key="name"
+    :rows-per-page-options="[10, 25, 50, 100]"
   >
     <template v-slot:body-cell-actions="props">
       <q-td>

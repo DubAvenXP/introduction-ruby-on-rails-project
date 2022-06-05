@@ -17,7 +17,6 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user.password = params[:password]
     basic_response(@user, :ok, @user.update(user_params))
   end
 

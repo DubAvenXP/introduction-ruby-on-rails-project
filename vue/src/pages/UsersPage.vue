@@ -6,7 +6,7 @@
         color="primary"
         icon="add_circle"
         label="Nuevo usuario"
-        @click="userModal = true"
+        @click="displayUserModal"
       />
     </div>
     <h1 v-if="isLoading">Cargando...</h1>
@@ -14,24 +14,25 @@
       v-else
       :rows="users"
       :columns="columns"
-      @edit-user="editUser"
-      @delete-user="deleteUser"
+      @edit-user="edit"
+      @delete-user="displayConfirmModal"
     ></user-table>
-    <q-dialog v-model="userModal">
+
+    <q-dialog v-model="userModalVisibility">
       <user-form></user-form>
     </q-dialog>
-    <q-dialog v-model="userConfirmModal">
+
+    <q-dialog v-model="confirmModalVisibility">
       <q-card>
         <q-card-section class="row items-center">
           <q-avatar icon="delete" color="primary" text-color="white" />
           <span class="q-ml-sm">
-            ¿ Estas seguro que quieres eliminar a {{ selectedUser?.name }} ?
+            ¿ Estas seguro que quieres eliminar a {{ user?.name }} ?
           </span>
         </q-card-section>
-
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" v-close-popup />
-          <q-btn flat label="Eliminar" color="red" v-close-popup />
+          <q-btn flat label="Eliminar" color="red" @click="onDelete" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -54,28 +55,30 @@ export default defineComponent({
   },
   setup() {
     const {
-      fetchUsers,
-      editUser,
-      deleteUser,
-      selectedUser,
-      columns,
-      users,
       isLoading,
+      users,
       user,
-      userModal,
-      userConfirmModal,
+      columns,
+      userModalVisibility,
+      confirmModalVisibility,
+      edit,
+      fetchUsers,
+      displayUserModal,
+      displayConfirmModal,
+      onDelete,
     } = useUser();
     fetchUsers();
     return {
-      editUser,
-      deleteUser,
-      selectedUser,
-      columns,
+      isLoading,
       users,
       user,
-      isLoading,
-      userModal,
-      userConfirmModal,
+      columns,
+      userModalVisibility,
+      confirmModalVisibility,
+      edit,
+      displayUserModal,
+      displayConfirmModal,
+      onDelete,
     };
   },
 });

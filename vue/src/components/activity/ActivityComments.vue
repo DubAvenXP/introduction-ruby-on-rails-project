@@ -12,7 +12,7 @@
         label="Ingresa un comentario"
         counter
         maxlength="145"
-        :dense="dense"
+        dense
       >
         <template v-slot:before>
           <q-avatar>

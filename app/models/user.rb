@@ -2,6 +2,8 @@ class User < ApplicationRecord
     include ActiveModel::SecurePassword
     
     has_secure_password
+
+    validates_presence_of :password, on: :create
     
     has_many :comments, dependent: :destroy
     has_many :assignments, dependent: :destroy
