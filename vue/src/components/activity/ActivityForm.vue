@@ -12,6 +12,7 @@ export default defineComponent({
       activity,
       isEditable,
       activityTypes,
+      activityEnrollments,
       accessLevels,
       activityForm,
       onCreate,
@@ -28,6 +29,8 @@ export default defineComponent({
       newActivity.value.end_date = activity.value.end_date;
       newActivity.value.location = activity.value.location;
       newActivity.value.budget = activity.value.budget;
+      newActivity.value.enrollment =
+        activity.value.enrollment === true ? "abiertas" : "cerradas";
     }
 
     return {
@@ -35,6 +38,7 @@ export default defineComponent({
       isEditable,
       newActivity,
       activityTypes,
+      activityEnrollments,
       accessLevels,
       activityForm,
       onCreate,
@@ -105,6 +109,22 @@ export default defineComponent({
         >
           <template v-slot:before>
             <q-icon name="public" />
+          </template>
+        </q-select>
+
+        <q-select
+          v-if="isEditable"
+          v-model="newActivity.enrollment"
+          :options="activityEnrollments"
+          label="Inscripciones"
+          lazy-rules
+          :rules="[
+            (val) =>
+              val.length > 0 || 'El estado de las inscripciones es requerido',
+          ]"
+        >
+          <template v-slot:before>
+            <q-icon name="library_books" />
           </template>
         </q-select>
 

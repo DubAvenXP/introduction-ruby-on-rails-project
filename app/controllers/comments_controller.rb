@@ -14,11 +14,14 @@ class CommentsController < ApplicationController
 
   def create
     #TODO: comment validations
-    @comment = Comment.new(comment_params)
+    merged_params = comment_params.merge(user_id: @current_user.id, activity_id: params[:activity_id])
+    puts "merged_params: #{merged_params}"
+    @comment = Comment.new(merged_params)
     basic_response(@comment, :created, @comment.save)
   end
 
   def update
+    merged_params = comment_params.merge(user_id: @current_user.id)
     basic_response(@comment, :ok, @comment.update(comment_params))
   end
 

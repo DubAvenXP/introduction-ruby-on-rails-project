@@ -1,10 +1,18 @@
-import { useActivityStore } from "src/stores/activity-store";
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+
+import { useActivityStore } from "src/stores/activity-store";
+import { useAssignmentStore } from "src/stores/assignment-store";
+import { useAuthStore } from "src/stores/auth-store";
+import { useCommentStore } from "src/stores/comment-store";
+
 import useNotify from "./useNotify";
 
 const useActivity = () => {
   const store = useActivityStore();
+  const assignmentStore = useAssignmentStore();
+  const commentStore = useCommentStore();
+  const authStore = useAuthStore();
   const router = useRouter();
   const route = useRoute();
   const { notifyError, notifySuccess } = useNotify();
@@ -19,6 +27,7 @@ const useActivity = () => {
     start_date: '',
     end_date: '',
     access_level: '',
+    enrollment: '',
   });
 
   const clearForm = () => {
@@ -31,20 +40,22 @@ const useActivity = () => {
       start_date: '',
       end_date: '',
       access_level: '',
+      enrollment: '',
     };
   };
 
   return {
-    newActivity,
-    activityForm,
-    confirmModalVisibility,
+    accessLevels: ['public', 'private'],
     activities: computed(() => store.activities),
-    isLoading: computed(() => store.isLoading),
     activity: computed(() => store.activity),
+    activityForm,
+    activityTypes: ['lunch', 'trip', 'party', 'recreational_outlet',],
+    activityEnrollments: ['abiertas', 'cerradas'],
+    confirmModalVisibility,
     currentActivity: computed(() => store.createdActivity),
     getImage: type => store.getActivityImageByType(type),
-    activityTypes: ['lunch', 'trip', 'party', 'recreational_outlet',],
-    accessLevels: ['public', 'private'],
+    isLoading: computed(() => store.isLoading),
+    newActivity,
     setActivityToStore: (activity) => {
       store.activity = activity;
     },
@@ -89,6 +100,9 @@ const useActivity = () => {
       if (activityForm.value) {
         const valid = await activityForm.value.validate();
         if (valid) {
+          newActivity.value.enrollment === 'abiertas' ?
+            newActivity.value.enrollment = true :
+            newActivity.value.enrollment = false;
           const error = await store.createActivity(newActivity.value);
           if (error) {
             notifyError('Error al crear actividad');
@@ -99,10 +113,38 @@ const useActivity = () => {
         }
       }
     },
+    onCreateAssignment: async () => {
+      const error = await assignmentStore.createAssignment(store.activity.id, authStore.user.id);
+      if (error) {
+        notifyError(error.data.error || 'Error al crear asignación');
+        return;
+      }
+      store.fetchActivityById(store.activity.id);
+      notifySuccess('Asignación creada correctamente');
+    },
+    onCreateComment: async (description) => {
+      console.log(description);
+      if (description === '') {
+        notifyError('Comentario vacío');
+        return;
+      }
+
+      const error = await commentStore.createComment(store.activity.id, description);
+
+      if (error) {
+        notifyError(error.data.error || 'Error al crear el comentario');
+        return;
+      }
+      store.fetchActivityById(store.activity.id);
+      notifySuccess('Comentario publicado correctamente');
+    },
     onUpdate: async () => {
       if (activityForm.value) {
         const valid = await activityForm.value.validate();
         if (valid) {
+          newActivity.value.enrollment === 'abiertas' ?
+            newActivity.value.enrollment = true :
+            newActivity.value.enrollment = false;
           const error = await store.updateActivity(newActivity.value);
           if (error) {
             notifyError(error.data.error || 'Error al actualizar actividad');
@@ -121,6 +163,15 @@ const useActivity = () => {
       }
       confirmModalVisibility.value = false;
       notifySuccess('Actividad eliminada correctamente');
+    },
+    onDeleteAssignment: async (assignmentId) => {
+      const error = await assignmentStore.deleteAssignment(store.activity.id, assignmentId);
+      if (error) {
+        notifyError(error.data.error || 'Error al eliminar la asignación');
+        return;
+      }
+      store.fetchActivityById(store.activity.id);
+      notifySuccess('Asignación eliminada correctamente');
     },
     onReset: () => {
       if (activityForm.value) {

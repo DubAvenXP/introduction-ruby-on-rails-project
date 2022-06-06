@@ -21,7 +21,13 @@
         </template>
 
         <template v-slot:after>
-          <q-btn round flat color="primary" icon="send" />
+          <q-btn
+            round
+            flat
+            color="primary"
+            icon="send"
+            @click="onCreateComment(comment)"
+          />
         </template>
       </q-input>
     </div>
@@ -41,7 +47,7 @@
           </q-item-label>
         </q-item-section>
 
-        <q-item-section side top> 1 min ago </q-item-section>
+        <!-- <q-item-section side top> 1 min ago </q-item-section> -->
       </q-item>
     </q-list>
   </article>
@@ -59,10 +65,11 @@ export default defineComponent({
     },
   },
   setup() {
-    const { getValue } = useActivity();
+    const { getValue, onCreateComment } = useActivity();
     const comment = ref("");
     return {
       getValue,
+      onCreateComment,
       comment,
     };
   },
