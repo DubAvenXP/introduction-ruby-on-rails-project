@@ -8,4 +8,5 @@ Rails.application.routes.draw do
   end
   resources :users
   post '/auth/login', to: 'authentication#login'
+  post '/auth/verify', to: 'authentication#verify_token'
 end

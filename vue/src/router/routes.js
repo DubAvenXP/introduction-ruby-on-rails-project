@@ -1,8 +1,10 @@
+import isAuthenticatedGuard from './guards/auth';
 
 const routes = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
+    beforeEnter: [isAuthenticatedGuard],
     children: [
       {
         path: '',

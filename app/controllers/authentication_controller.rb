@@ -21,4 +21,19 @@ class AuthenticationController < ApplicationController
             error_response('Invalid email or password', :unauthorized)
         end
     end
+
+    def verify_token
+        if @current_user
+            user = {
+                id: @current_user.id,
+                name: @current_user.name,
+                email: @current_user.email,
+                role: @current_user.role,
+            }
+            token = jwt_encode(sub: @current_user.id)
+            basic_response({ user: user, token: token }, :ok)
+        else
+            error_response('Invalid token', :unauthorized)
+        end
+    end
 end
